@@ -29,17 +29,31 @@ public class Solution {
         }        
         if ("".equals(s)) {
             throw new IllegalArgumentException();
+        }        
+        
+        if(!s.contains("(")) {
+            return this.calculateWithOutParenthesis(s);
         }
         
+        int openIndex = s.lastIndexOf('(');
+        int closeIndex = s.indexOf(')', s.lastIndexOf('('));
+        
+        int subResult = this.calculateWithOutParenthesis(s.substring(openIndex + 1, closeIndex));        
+        
+        String str = s.replace(s.substring(openIndex, closeIndex + 1), Integer.toString(subResult));
+        
+        return this.calculate(str);
+    }
+    
+    private int calculateWithOutParenthesis (String s) {
         char sign = '+';
         int number = 0;
         int sum = 0;
         
-        if(!s.contains("(")) {
-            for(int i=0;i<s.length();i++) {
+        for(int i=0;i<s.length();i++) {
                 if(Character.isDigit(s.charAt(i))) {
                     number = number * 10 + Character.getNumericValue(s.charAt(i));
-                    if(i==s.length()-1 || !Character.isDigit(s.charAt(i+1))){
+                    if(i==s.length()-1 || !Character.isDigit(s.charAt(i+1))) {
                         
                         switch(sign) {
                             case '+' : sum += number;
@@ -48,18 +62,22 @@ public class Solution {
                             case '-' : sum -= number;
                                        number = 0;
                                        break;
-                        }                        
+                        }
+                        sign = '+';
                     }
                 } else {
                     switch(s.charAt(i)) {
-                        case '+' : sign = '+'; break;
-                        case '-' : sign = '-'; break;
+                        case '+' :                                                     
+                            break;
+                        case '-' : 
+                            if(sign == '-') {
+                               sign = '+'; 
+                            } else { sign = '-'; }
+                            break;
                         case ' ' : break;                        
                     }
                 }
             }            
-            return sum;
-        }        
-        return 0;
+        return sum;
     }
 }
