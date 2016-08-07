@@ -26,10 +26,7 @@ public class Solution {
         
         if (s == null) {
             throw new NullPointerException();
-        }        
-        if ("".equals(s)) {
-            throw new IllegalArgumentException();
-        }        
+        }      
         
         if(!s.contains("(")) {
             return this.calculateWithoutParenthesis(s);
@@ -52,7 +49,7 @@ public class Solution {
         
         for(int i=0;i<s.length();i++) {
                 if(Character.isDigit(s.charAt(i))) {
-                    number = number * 10 + Character.getNumericValue(s.charAt(i));
+                    number = (number << 3) + (number << 1) + Character.getNumericValue(s.charAt(i));
                     if(i==s.length()-1 || !Character.isDigit(s.charAt(i+1))) {
                         
                         switch(sign) {
@@ -65,18 +62,11 @@ public class Solution {
                         }
                         sign = '+';
                     }
-                } else {
-                    switch(s.charAt(i)) {
-                        case '+' :                                                     
-                            break;
-                        case '-' : 
-                            if(sign == '-') {
+                } else if (s.charAt(i) == '-') {
+                           if(sign == '-') {
                                sign = '+'; 
-                            } else { sign = '-'; }
-                            break;
-                        case ' ' : break;                        
-                    }
-                }
+                            } else { sign = '-'; }                     
+                    }                
             }            
         return sum;
     }
