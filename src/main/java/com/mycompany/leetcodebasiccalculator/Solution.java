@@ -23,6 +23,43 @@ public class Solution {
     * 
     */    
     public int calculate(String s) {
-        throw new NotImplementedException();
+        
+        if (s == null) {
+            throw new NullPointerException();
+        }        
+        if ("".equals(s)) {
+            throw new IllegalArgumentException();
+        }
+        
+        char sign = '+';
+        int number = 0;
+        int sum = 0;
+        
+        if(!s.contains("(")) {
+            for(int i=0;i<s.length();i++) {
+                if(Character.isDigit(s.charAt(i))) {
+                    number = number * 10 + Character.getNumericValue(s.charAt(i));
+                    if(i==s.length()-1 || !Character.isDigit(s.charAt(i+1))){
+                        
+                        switch(sign) {
+                            case '+' : sum += number;
+                                       number = 0;
+                                       break;
+                            case '-' : sum -= number;
+                                       number = 0;
+                                       break;
+                        }                        
+                    }
+                } else {
+                    switch(s.charAt(i)) {
+                        case '+' : sign = '+'; break;
+                        case '-' : sign = '-'; break;
+                        case ' ' : break;                        
+                    }
+                }
+            }            
+            return sum;
+        }        
+        return 0;
     }
 }
