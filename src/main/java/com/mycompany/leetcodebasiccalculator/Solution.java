@@ -32,20 +32,20 @@ public class Solution {
         }        
         
         if(!s.contains("(")) {
-            return this.calculateWithOutParenthesis(s);
+            return this.calculateWithoutParenthesis(s);
         }
         
         int openIndex = s.lastIndexOf('(');
         int closeIndex = s.indexOf(')', s.lastIndexOf('('));
         
-        int subResult = this.calculateWithOutParenthesis(s.substring(openIndex + 1, closeIndex));        
+        int subResult = this.calculateWithoutParenthesis(s.substring(openIndex + 1, closeIndex));        
         
         String str = s.replace(s.substring(openIndex, closeIndex + 1), Integer.toString(subResult));
         
         return this.calculate(str);
     }
     
-    private int calculateWithOutParenthesis (String s) {
+    private int calculateWithoutParenthesis (String s) {
         char sign = '+';
         int number = 0;
         int sum = 0;
