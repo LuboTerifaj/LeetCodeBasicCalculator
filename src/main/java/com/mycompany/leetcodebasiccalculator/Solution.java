@@ -5,6 +5,7 @@
  */
 package com.mycompany.leetcodebasiccalculator;
 
+import java.util.Stack;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -26,48 +27,37 @@ public class Solution {
         
         if (s == null) {
             throw new NullPointerException();
-        }      
-        
-        if(!s.contains("(")) {
-            return this.calculateWithoutParenthesis(s);
         }
         
-        int openIndex = s.lastIndexOf('(');
-        int closeIndex = s.indexOf(')', s.lastIndexOf('('));
-        
-        int subResult = this.calculateWithoutParenthesis(s.substring(openIndex + 1, closeIndex));        
-        
-        String str = s.replace(s.substring(openIndex, closeIndex + 1), Integer.toString(subResult));
-        
-        return this.calculate(str);
-    }
-    
-    private int calculateWithoutParenthesis (String s) {
-        char sign = '+';
         int number = 0;
         int sum = 0;
+        int sign = 1;
+        
+        Stack<Integer> stack = new <Integer>Stack();
         
         for(int i=0;i<s.length();i++) {
-                if(Character.isDigit(s.charAt(i))) {
+            if(Character.isDigit(s.charAt(i))) {
                     number = (number << 3) + (number << 1) + Character.getNumericValue(s.charAt(i));
-                    if(i==s.length()-1 || !Character.isDigit(s.charAt(i+1))) {
-                        
-                        switch(sign) {
-                            case '+' : sum += number;
-                                       number = 0;
-                                       break;
-                            case '-' : sum -= number;
-                                       number = 0;
-                                       break;
-                        }
-                        sign = '+';
-                    }
-                } else if (s.charAt(i) == '-') {
-                           if(sign == '-') {
-                               sign = '+'; 
-                            } else { sign = '-'; }                     
-                    }                
+                if(i==s.length()-1 || !Character.isDigit(s.charAt(i+1))) {
+                    sum = sum + number * sign;
+                    number = 0;
+                }
+            } else {
+                switch (s.charAt(i)) {
+                    case '+' : sign = 1; break;
+                    case '-' : sign = -1; break;
+                    case '(' : 
+                        stack.push(sum);
+                        stack.push(sign);
+                        sum = 0;
+                        sign = 1;
+                        break;
+                    case ')' : 
+                        sum = sum * stack.pop() + stack.pop();
+                        break;
+                }
             }            
-        return sum;
-    }
+        }
+        return sum;        
+    }    
 }
